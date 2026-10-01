@@ -1,0 +1,15 @@
+--- a/smali_classes3/dev/bluehouse/enablevolte/BrokerInstrumentation.smali
++++ b/smali_classes3/dev/bluehouse/enablevolte/BrokerInstrumentation.smali
+@@
+-    invoke-interface {v1}, Landroid/app/IActivityManager;->stopDelegateShellPermissionIdentity()V
++    invoke-static {}, Landroid/system/Os;->getuid()I
++    move-result v0
++    invoke-interface {v1, v0}, Landroid/app/IActivityManager;->stopDelegateShellPermissionIdentity(I)V
+@@
+ ; Applied at four call sites in applyConfig / clearConfig
+ ; (normal return path and exception rethrow path for each).
+ ; Registers may vary slightly per site; pattern is identical:
+ ;   getuid → move-result → stopDelegateShellPermissionIdentity(I)V
+ ;
+ ; Base: Pixel IMS 1.3.2 (kyujin-cho/pixel-volte-patch)
+ ; Target: Android 17 IActivityManager AIDL
